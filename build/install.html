@@ -1,0 +1,28 @@
+<html>
+  <body>
+    <p>Packaged app installation page</p>
+    <script>
+function install(){
+	var url = window.location.href;
+	url=url.substring(0,url.lastIndexOf('/'));
+	// This URL must be a full url.
+	var manifestUrl = url+'/manifest.webapp';
+	alert("Install hosted application :"+manifestUrl);
+	//var req = navigator.mozApps.install(manifestUrl);
+	try{
+		var req = navigator.mozApps.install(manifestUrl);
+	}catch(e){
+		alert('Exception ' + e);
+	}
+	  req.onsuccess = function() {
+        alert('SUCESS:'+this.result.origin);
+      };
+      req.onerror = function() {
+        alert('ERROR:'+this.error.name);
+      };
+}
+    </script>
+	<button onclick="install()">install hosted application</button>
+	
+  </body>
+</html>
