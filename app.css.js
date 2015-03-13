@@ -6,7 +6,7 @@ CSS in JS format.
 var debug=0;
 var baseSize=25;
 var lgreen=0x5F5;
-
+var formWidth=800;
 var css ={
 	"html, body": {
 	 width: "100%",
@@ -55,6 +55,24 @@ var css ={
 		border: "2px solid black",
 		"border-radius": "22px",
 		"background-color": "white"
+	},
+	"#form": {
+	 border:"1px solid black",
+	 text_align:"center",
+	 width: formWidth,
+//	 height: 750,
+	 color: 0x5F9EA0,
+	 font: debug?"200 10px monospace":"bold 20px arial",
+	 overflow:"auto",
+	 margin_top: 5,
+	 margin_left: "auto",
+     margin_right: "auto"
+	},
+	"#form textarea": {
+	 height: 400,
+	 margin_top: 5,
+//	 margin_left: "auto",
+//     margin_right: "auto"
 	},
 	"#message": {
 	 border:"1px solid black",

@@ -111,12 +111,17 @@ this.extend(this,{
 	
 	InputBinding: function InputBinding(scope,key,input){
 		var moncul=this;
+		scope.dwatchers[key]=scope.dwatchers[key]||[];
 		this.change=function(){
+			var old=scope[key];
 			scope[key]=input[0].value;
+			scope.dwatchers[k].each(function(elt){
+				elt(scope[key],old);
+			});
 		}
 	},
 	/**
-		databind angular (free) style)
+		databind angular (free) style
 		obj: your scope
 		elt: your DOM part optional, document is default.
 		* 
@@ -126,6 +131,7 @@ this.extend(this,{
 	*/
 	dataBind: function(obj, elt){
 		elt=elt||document;
+		obj.dwatchers={};
 		for( key in obj){
 			var input = elt.getElementsByName(key);
 			if (input.length){
@@ -134,13 +140,28 @@ this.extend(this,{
 		}
 		obj.$apply=function(){me.apply(obj,elt)};
 		obj.$apply();
+		
+	},
+	
+	_processElement: function(elt){
+		if(elt.dProcessed) return;
+		elt.dattributes={};
+		for(var i=0;i< elt.attributes.length;i++){
+			elt.dattributes[elt.attributes[i].name]=elt.attributes[i].value;
+		}
+		elt.dProcessed=true;
 	},
 	
 	apply: function(obj,elt){
 		for( key in obj){
 			var input = elt.getElementsByName(key);
-			if (input.length){
-				input[0].value=obj[key];
+			for(var i=0;i< input.length;i++){
+				me._processElement(input[i]);
+				if(input[i].tagName==="DVALUE" || util.defined(input[i].dattributes.dvalue)){
+					input[i].innerHTML=obj[key];
+				}else{
+					input[i].value=obj[key];
+				}
 			}
 		}
 	}
@@ -150,3 +171,17 @@ this.extend(this,{
 );//eof extends
 }//eof functiond
 
+var util={
+	defined:function(obj){
+		return obj != undefined;
+	},
+	each:function(fun){
+		for(var i=0;i<this.length;i++){
+			fun(this[i]);
+		}
+	},
+	_init:function(){
+		Array.prototype.each=util.each;
+	}
+};
+util._init();

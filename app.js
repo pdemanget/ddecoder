@@ -23,7 +23,8 @@ modified: -
  djs specific
  js2css
  js2html
- 
+
+TODO binding no input value 
 ====================================================
 */
 
@@ -35,9 +36,17 @@ var app={
 		d.links.help=app.help;
 	},
 	start:function(){
-		var json = JSON.parse( app.values.js);
-		var html = d.js2css(json);
-		app.values.html=html;
+		try{
+			var json = JSON.parse( app.values.js);
+			var html = d.js2css(json);
+			app.values.html=html;
+			app.values.message="process OK";
+		
+		} catch(e){
+			app.values.message="message1"+e;
+			
+		}
+		app.values.message2="message2";
 		app.values.$apply();
 	},
 	select:function(){
@@ -55,6 +64,7 @@ var app={
 	init:function(){
 		//link input to variable with d.js
 		d.dataBind(app.values);
+		app.values.dwatchers.js.push(alert);
 	}
 	
 };
